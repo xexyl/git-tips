@@ -310,4 +310,5 @@ git push --force
 where `master` is the master branch, whether `main` or `master` or something
 else.
 
-
+**NOTE**: the solution comes from comments at [this GitHub
+discussion](https://github.com/orgs/community/discussions/23353).
