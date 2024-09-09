@@ -1,4 +1,4 @@
-# git tips README.md
+# `git(1)` tips
 
 # Introduction
 
