@@ -1,19 +1,42 @@
 # git tips README.md
 
-## Introduction
+# Introduction
 
-This is at this time (as of 17 October 2023) a rather small list of tips for
+This is at this time (as of 09 September 2024) a rather small list of tips for
 `git(1)` that I've either discovered on my own or have come across or have been
 told by others. If you have any that you'd like to share feel free to open a
 pull request and I'll consider merging it, making sure to give you credit. I
 don't expect this to be useful to some but it is useful to me if nobody else.
 
-### Disclaimer
+This also has things that I have had to do to fix problems, in particular with
+GitHub, but most are more generally related to `git` itself. I do not use the
+GitHub command line here as I'm used to `git(1)` though I have been told that I
+might want to change that for GitHub, esp when it comes to repos I maintain.
+There are things I have written about elsewhere that refer to GitHub specific
+tasks but these are not here either, at least not for now.
+
+
+# Disclaimer
 
 I cannot consider myself a `git(1)` expert but I do have a reasonable amount of
 experience using it and this is another reason the list is fairly short for now.
 
-## Special mentions
+Also I do not care to get into the debate of `master` versus `main`. My repos
+use `master` but below I try and refer to both when it matters.
+
+
+# `git` version
+
+In case of different behaviour in different `git(1)` versions, as has certainly
+happened, I give the version I use now:
+
+```sh
+$ git --version
+git version 2.42.0
+```
+
+
+# Special mentions
 
 A special mention where a number of things come from is my good friend [Landon
 Curt Noll](http://isthe.com/chongo/) ([GitHub](https://github.com/lcn2),
@@ -25,7 +48,7 @@ judges.
 Below I will just refer to Landon and not link to him again.
 
 
-## gitattributes
+# gitattributes
 
 As I'm a C programmer I naturally like `diff(1)` output to be in C format for C
 files so whether or not this is strictly necessary, I have simply:
@@ -39,7 +62,7 @@ files so whether or not this is strictly necessary, I have simply:
 (Though I really, really, really do **NOT** like C++.)
 
 
-## A powerful alternative to aliases
+# A powerful alternative to aliases
 
 This is something I discovered the other day that's very useful as it allows one
 to do much more than what `git(1)` aliases allow for.
@@ -56,7 +79,7 @@ git foo
 
 and it will run the script.
 
-## **Warning: this can run commands that are NOT git commands as long as it is run in a git repository!**
+## **WARNING**: this can run commands that are **NOT** git commands as long as it is run in a git repository!
 
 For instance the above file might be:
 
@@ -72,12 +95,12 @@ Thus there is a potential danger of commands being injected if someone does
 something nasty for instance if it's in `/usr/local/bin` and it's in your path!
 
 
-### Alias scripts
+## Alias scripts
 
 These are some that I have made that I find useful though one can certainly name
 them whatever they like.
 
-#### List branches
+### List branches
 
 The following script will list branches of the repository, skipping the branches
 `master` and `main`:
@@ -109,9 +132,10 @@ though that's not been tested.
 A fun exercise is to run (if you have more branches than master or main) the
 script manually and also run it as a `git(1)` command and then see what happens.
 
-#### Delete branches that are NOT master or main
 
-**Warning: this will delete branches that you have not created!**
+### Delete branches that are NOT master or main
+
+**WARNING**: this **WILL DELETE ALL BRANCHES**, even those that you have not created!
 
 This script uses a function that consists of the `git-ls-branches` script shown
 above. It is used as a function in the script but it might be possible to use
@@ -130,7 +154,7 @@ for i in $(git_ls_branches); do
 done
 ```
 
-#### Summarise how many commits each committer has made, highest count first
+### Summarise how many commits each committer has made, highest count first
 
 This script is far from perfect and will not pass `shellcheck(1)` either but
 it's useful for what I desire:
@@ -144,12 +168,12 @@ for i in $(git shortlog -ns|cut -f2-); do
 done
 ```
 
-## Aliases
+# Aliases
 
 Here are more basic aliases that are in the `.gitconfig` file in the `[alias]`
 section. One shows that you can create functions and use them as well.
 
-### Diff involving the most recent commit
+## Diff involving the most recent commit
 
 This is from Landon and it goes like:
 
@@ -165,7 +189,7 @@ To have just the name of files modified, try:
 cdiff-nameonly = diff @~ @ --name-only
 ```
 
-### List already committed files that are being tracked
+## List already committed files that are being tracked
 
 This pair is a pair I came up with as often I have files that are not being
 tracked but are nonetheless important or useful in some way.
@@ -175,13 +199,13 @@ tracked but are nonetheless important or useful in some way.
 # list already committed files tracked from the current directory
 tracking-cwd = ls-tree -r --name-only HEAD
 # list full tree of already committed files tracked
-tracking = ls-tree --full-tree -r --name-only HEAD 
+tracking = ls-tree --full-tree -r --name-only HEAD
 ```
 
 The first one only shows that in the current working directory whereas the
 second shows all files in the repo.
 
-### Making `git co` work like `co` of older RCS software
+## Making `git co` work like `co` of older RCS software
 
 This was suggested to me by Landon. It's not something I thought of resolving
 but it has always bothered me that `git(1)` does not natively support it.
@@ -199,7 +223,7 @@ Suggested to me by Landon:
 glog = log --graph --color --decorate
 ```
 
-### List modified files under git control
+## List modified files under git control
 
 This was also suggested to me by Landon:
 
@@ -208,7 +232,7 @@ This was also suggested to me by Landon:
 check = diff --name-only
 ```
 
-### Information on a commit
+## Information on a commit
 
 Also from Landon:
 
@@ -223,7 +247,7 @@ Use like:
 git cinfo <object>
 ```
 
-### List files, allowing for globs as well
+## List files, allowing for globs as well
 
 It bothered me that one has to use `ls-files` rather than just `ls` so I made an
 alias:
@@ -233,7 +257,7 @@ alias:
 ls = ls-files
 ```
 
-### Full check on the repository and fix dangling commits
+## Full check on the repository and fix dangling commits
 
 These come from Landon as well and it shows how to use functions in `git(1)`
 aliases.
@@ -249,4 +273,41 @@ fullfix = "!f_fullfix() { \
     }; \
 f_fullfix"
 ```
+
+# GitHub things
+
+Here are things I think are worth mentioning that are specific to GitHub.
+
+## Fixing the problem where every PR you make requires you to merge into master
+
+This has happened to me many times and the solution I knew of was to delete the
+fork, recreate it, clone it again and set it up again for GitHub. I had this
+problem again on 08-09 September 2024 so I looked into it.
+
+### **WARNING**: this WILL wipe out UNCOMMITTED changes!
+
+As usual, when you're doing something drastic, you should make sure you have a
+backup. Of course you should always have a backup anyway but the below procedure
+WILL wipe out changes not committed!
+
+Anyway, this should solve the problem:
+
+First if you have not set up the `upstream` then do:
+
+```sh
+git remote add upstream <github_url>
+```
+
+Then you can do this:
+
+```sh
+git checkout master
+git fetch upstream
+git reset --hard upstream/master
+git push --force
+```
+
+where `master` is the master branch, whether `main` or `master` or something
+else.
+
 
